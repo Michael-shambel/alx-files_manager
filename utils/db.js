@@ -12,7 +12,6 @@ class DBClient {
 
     this.client.connect()
       .then(() => {
-        console.log('Connection to DB established');
         this.db = this.client.db(this.dbName);
       })
       .catch((error) => {
