@@ -8,7 +8,7 @@ class DBClient {
   constructor() {
     this.url = `mongodb://${DB_HOST}:${DB_PORT}`;
     this.dbName = DB_DATABASE;
-    this.client = new MongoClient(this.url);
+    this.client = new MongoClient(this.url, { useUnifiedTopology: true });
     this.db = null;
 
     this.client.connect()
@@ -21,7 +21,7 @@ class DBClient {
   }
 
   isAlive() {
-    return this.client && this.client.isconnected();
+    return this.client.isconnected();
   }
 
   async nbUsers() {
