@@ -27,7 +27,7 @@ class DBClient {
   async nbUsers() {
     try {
       if (!this.isAlive()) return 0;
-      const fileCollection = this.db.collection('users');
+      const userCollection = this.db.collection('users');
       return await userCollection.countDocuments();
     } catch (error) {
       console.error('Error getting number of users:', error);
