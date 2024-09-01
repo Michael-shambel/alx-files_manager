@@ -8,7 +8,7 @@ class DBClient {
   constructor() {
     this.url = `mongodb://${DB_HOST}:${DB_PORT}`;
     this.dbName = DB_DATABASE;
-    this.client = new MongoClient(this.url, { useNewUrlParser: true, useUnifiedTopology: true });
+    this.client = new MongoClient(this.url);
     this.db = null;
 
     this.client.connect()
