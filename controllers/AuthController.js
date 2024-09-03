@@ -7,17 +7,17 @@ class AuthController {
   static async getConnect(req, res) {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Basic ')) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    // if (!authHeader || !authHeader.startsWith('Basic ')) {
+    //   return res.status(401).json({ error: 'Unauthorized' });
+    // }
 
     const base64Credentials = authHeader.split(' ')[1];
     const credentials = Buffer.from(base64Credentials, 'base64').toString('utf8');
     const [email, password] = credentials.split(':');
 
-    if (!email || !password) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    // if (!email || !password) {
+    //   return res.status(401).json({ error: 'Unauthorized' });
+    // }
 
     const desha1password = sha1(password);
 
@@ -37,9 +37,9 @@ class AuthController {
   static async getDisconnect(req, res) {
     const token = req.headers['x-token'];
 
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    // if (!token) {
+    //   return res.status(401).json({ error: 'Unauthorized' });
+    // }
 
     const key = `auth_${token}`;
 

@@ -28,7 +28,7 @@ class UsersController {
   }
 
   static async getMe(req, res) {
-    const token = req.headers['s-token'];
+    const token = req.headers['x-token'];
 
     if (!token) {
       return res.status(401).json({ error: 'Unauthorized' });

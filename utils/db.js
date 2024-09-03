@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
 class DBClient {
   constructor() {
@@ -39,6 +39,10 @@ class DBClient {
       console.error('Error getting number of files:', error);
       return 0;
     }
+  }
+
+  getObjectId(id) {
+    return new ObjectId(id);
   }
 }
 
