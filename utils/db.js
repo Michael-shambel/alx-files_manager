@@ -41,7 +41,7 @@ class DBClient {
     }
   }
 
-  getObjectId(id) {
+  static getObjectId(id) {
     return new ObjectId(id);
   }
 }
