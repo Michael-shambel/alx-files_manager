@@ -100,11 +100,11 @@ class FilesController {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const user = await dbClient.db.collection('users').findOne({ _id: ObjectId(userId) });
+    // const user = await dbClient.db.collection('users').findOne({ _id: ObjectId(userId) });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    // if (!user) {
+    //   return res.status(401).json({ error: 'Unauthorized' });
+    // }
 
     const fileId = req.params.id;
     const file = await dbClient.db.collection('files').findOne({ _id: ObjectId(fileId), userId: ObjectId(userId) });
@@ -113,7 +113,14 @@ class FilesController {
       return res.status(404).json({ error: 'Not found' });
     }
 
-    return res.status(200).json(file);
+    return res.status(200).json({
+      id: file._id.toString(),
+      userId: file.userId.toString(),
+      name: file.name,
+      type: file.type,
+      isPublic: file.isPublic,
+      parentId: file.parentId.toString(),
+    });
   }
 
   static async getIndex(req, res) {
@@ -129,11 +136,11 @@ class FilesController {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const user = await dbClient.db.collection('users').findOne({ _id: ObjectId(userId) });
+    // const user = await dbClient.db.collection('users').findOne({ _id: ObjectId(userId) });
 
-    if (!user) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    // if (!user) {
+    //   return res.status(401).json({ error: 'Unauthorized' });
+    // }
 
     const parentId = req.query.parentId || '0';
     const page = parseInt(req.query.page, 10) || 0;
@@ -154,7 +161,14 @@ class FilesController {
       .limit(20)
       .toArray();
 
-    return res.status(200).json(files);
+    return res.status(200).json(files.map(file => ({
+      id: file._id.toString(),
+      userId: file.userId.toString(),
+      name: file.name,
+      type: file.type,
+      isPublic: file.isPublic,
+      parentId: file.parentId.toString(),
+    })));
   }
 }
 
