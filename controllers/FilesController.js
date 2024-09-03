@@ -161,7 +161,7 @@ class FilesController {
       .limit(20)
       .toArray();
 
-    return res.status(200).json(files.map(file => ({
+    return res.status(200).json(files.map((file) => ({
       id: file._id.toString(),
       userId: file.userId.toString(),
       name: file.name,
