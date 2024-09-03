@@ -23,9 +23,7 @@ class FilesController {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const {
-      name, type, parentId = '0', isPublic = false, data,
-    } = req.body;
+    const { name, type, parentId = '0', isPublic = false, data } = req.body;
     if (!name) {
       return res.status(400).json({ error: 'Missing name' });
     }
@@ -59,8 +57,12 @@ class FilesController {
     };
 
     if (type === 'folder') {
-      await dbClient.db.collection('files').insertOne(fileDocument);
-      return res.status(201).json(fileDocument);
+      const result = await dbClient.db.collection('files').insertOne(fileDocument);
+      return res.status(201).json({
+        id: result.insertedId,
+        ...fileDocument,
+        parentId: parentId === '0' ? 0 : parentId,
+      });
     }
     const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
     if (!fs.existsSync(folderPath)) {
@@ -72,8 +74,15 @@ class FilesController {
     await fs.promises.writeFile(localPath, fileBuffer);
 
     fileDocument.localPath = localPath;
-    await dbClient.db.collection('files').insertOne(fileDocument);
-    return res.status(201).json(fileDocument);
+    const result = await dbClient.db.collection('files').insertOne(fileDocument);
+    return res.status(201).json({
+      id: result.insertedId,
+      userId: fileDocument.userId,
+      name: fileDocument.name,
+      type: fileDocument.type,
+      isPublic: fileDocument.isPublic,
+      parentId: parentId === '0' ? 0 : parentId,
+    });
   }
 
   static async getShow(req, res) {
