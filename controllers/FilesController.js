@@ -261,9 +261,13 @@ class FilesController {
     res.setHeader('Content-Type', mimeType);
 
     // const fileContent = fs.readFileSync(file.localPath);
+    // return res.status(200).send(fileContent);
+    // const fileStream = fs.createReadStream(file.localPath);
+    // return fileContent.pipe(res)
+
     const realpathAsync = fs.realpath;
     const fileStream = await realpathAsync(file.localPath);
-    return res.status(200).sendFile(fileStream);
+    return res.status(200).send(fileStream);
   }
 }
 
