@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-// import mime from 'mime-types';
 import { ObjectId } from 'mongodb';
 import { v4 as uuidv4 } from 'uuid';
 import mime from 'mime-types';
@@ -233,10 +232,10 @@ class FilesController {
   }
 
   static async getFile(req, res) {
-    const token = req.headers('x-token');
+    const token = req.headers['x-token'];
     const { id } = req.params;
 
-    const file = await dbClient.db.collection('file').findOne({ _id: ObjectId(id) });
+    const file = await dbClient.db.collection('files').findOne({ _id: ObjectId(id) });
 
     if (!file) {
       return res.status(404).json({ error: 'Not found' });
@@ -261,8 +260,10 @@ class FilesController {
 
     const mimeType = mime.lookup(file.name);
     res.setHeader('Content-Type', mimeType);
-    const fileContent = fs.readFileSync(file.localPath);
-    return res.status(200).send(fileContent);
+    // const fileContent = fs.readFileSync(file.localPath); (sync and locks event loop)
+    const fileContent = fs.createReadStream(file.localPath);
+    // return res.status(200).send(fileContent);
+    return fileContent.pipe(res);
   }
 }
 
